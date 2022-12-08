@@ -12,7 +12,7 @@ const helmet = require('helmet');
 const expressEnforcesSsl = require('express-enforces-ssl');
 
 const env = process.env.NODE_ENV || 'development';
-const config = require('./config/config');
+const config = require('./config/config')();
 const strategy = require('./config/passport')(passport, config);
 
 const app = express();
