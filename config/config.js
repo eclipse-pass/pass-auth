@@ -1,17 +1,20 @@
 const fs = require('fs');
 
 module.exports = function () {
-  const idpCert = fs
-    .readFileSync('/run/secrets/idp_cert', 'utf-8')
-    .replace(/[\n\r]/g, '')
-    .replace(/-----BEGIN CERTIFICATE-----/g, '')
-    .replace(/-----END CERTIFICATE-----/g, '');
+  // passport-saml requires the certs to be single line strings in some
+  // properties rather than the full cert file.
+  const makeSingleLine = (fileData) => {
+    return fileData
+      .replace(/[\n\r]/g, '')
+      .replace(/-----BEGIN CERTIFICATE-----/g, '')
+      .replace(/-----END CERTIFICATE-----/g, '');
+  };
 
-  const spCert = fs
-    .readFileSync('/run/secrets/sp_cert', 'utf-8')
-    .replace(/[\n\r]/g, '')
-    .replace(/-----BEGIN CERTIFICATE-----/g, '')
-    .replace(/-----END CERTIFICATE-----/g, '');
+  let fileData = fs.readFileSync('/run/secrets/idp_cert', 'utf-8');
+  const idpCert = makeSingleLine(fileData);
+
+  fileData = fs.readFileSync('/run/secrets/sp_cert', 'utf-8');
+  const spCert = makeSingleLine(fileData);
 
   return {
     app: {
@@ -41,7 +44,6 @@ module.exports = function () {
       multiSaml: {
         jhu: {
           entryPoint: process.env.SAML_ENTRY_POINT,
-          // cert: process.env.SIGNING_CERT_IDP,
           cert: idpCert,
         },
         sp: {
