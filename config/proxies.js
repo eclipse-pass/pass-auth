@@ -83,11 +83,11 @@ module.exports = function (app, apiProxy, config) {
   });
 
   // This points to the doi service in core
-  app.all('/journal', ensureAuthenticated, function (req, res) {
+  app.all('/doi/journal', ensureAuthenticated, function (req, res) {
     apiProxy.web(req, res, { target: config.app.serviceUrls.doiServiceUrl });
   });
 
-  app.all('/downloadservice/*', ensureAuthenticated, function (req, res) {
+  app.all('/doi/manuscript', ensureAuthenticated, function (req, res) {
     apiProxy.web(req, res, {
       target: config.app.serviceUrls.downloadServiceUrl,
     });
