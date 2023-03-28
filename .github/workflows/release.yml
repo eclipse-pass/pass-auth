@@ -12,7 +12,6 @@ on:
 
 jobs:
   release:
-    needs: bump-version
     if: github.repository == 'eclipse-pass/pass-auth'
     runs-on: ubuntu-latest
 
