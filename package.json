@@ -1,11 +1,12 @@
 {
   "name": "pass-auth",
-  "version": "0.3.0",
+  "version": "0.4.0-SNAPSHOT",
   "description": "A service provider authentication strategy for the pass-eclipse project.",
   "author": "Jared Galanis",
   "proxy": "https://pass.local",
   "scripts": {
     "build": "docker build -t ghcr.io/eclipse-pass/pass-auth:$npm_package_version .",
+    "build:latest": "docker build -t ghcr.io/eclipse-pass/pass-auth:latest .",
     "start": "nodemon app.js",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
