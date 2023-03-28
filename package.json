@@ -6,6 +6,7 @@
   "proxy": "https://pass.local",
   "scripts": {
     "build": "docker build -t ghcr.io/eclipse-pass/pass-auth:$npm_package_version .",
+    "build:latest": "docker build -t ghcr.io/eclipse-pass/pass-auth:latest .",
     "start": "nodemon app.js",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
