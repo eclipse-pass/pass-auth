@@ -78,8 +78,8 @@ module.exports = async function (_req, profile, done, config) {
           Accept: 'application/vnd.api+json',
         },
         auth: {
-          username: process.env('PASS_CORE_BACKEND_USER'),
-          password: process.env('PASS_CORE_BACKEND_PASSWORD'),
+          username: config.app.basicAuthUserName,
+          password: config.app.basicAuthPassword,
         },
       }
     );
