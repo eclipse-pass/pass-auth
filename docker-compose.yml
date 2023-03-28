@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   pass-auth:
-    image: ghcr.io/eclipse-pass/pass-auth:0.2.0
+    image: ghcr.io/eclipse-pass/pass-auth:0.4.0-SNAPSHOT
     build:
       context: .
     restart: always
