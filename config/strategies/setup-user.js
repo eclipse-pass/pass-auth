@@ -78,8 +78,8 @@ module.exports = async function (_req, profile, done, config) {
           Accept: 'application/vnd.api+json',
         },
         auth: {
-          username: this.process.env('PASS_CORE_BACKEND_USER'),
-          password: this.process.env('PASS_CORE_BACKEND_PASSWORD'),
+          username: process.env('PASS_CORE_BACKEND_USER'),
+          password: process.env('PASS_CORE_BACKEND_PASSWORD'),
         },
       }
     );
