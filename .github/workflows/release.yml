@@ -5,37 +5,12 @@ on:
     inputs:
       releaseversion:
         required: true
-        description: Version to release
+        description: Version to release (e.g. 0.3.0)
+      nextversion:
+        required: true
+        description: Next development version (e.g. 0.4.0-SNAPSHOT)
 
 jobs:
-  bump-version:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Config git user
-        run: |
-          git config user.name ${{ github.actor }}
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-
-      - name: Setup Node & Yarn
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: 'yarn'
-
-      - name: Update project version
-        run: |
-          yarn install --frozen-lockfile
-          yarn version --new-version ${{ inputs.releaseversion }}
-
-      - name: Tag and push release version, updating 'main' with new version
-        run: |
-          git tag ${{ inputs.releaseversion }}
-          git push origin main
-          git push origin ${{ inputs.releaseversion }}
-
   release:
     needs: bump-version
     if: github.repository == 'eclipse-pass/pass-auth'
@@ -53,10 +28,21 @@ jobs:
           node-version: 18
           cache: 'yarn'
 
+      - name: Update project version to release version
+        run: |
+          yarn install --frozen-lockfile
+          yarn version --new-version ${{ inputs.releaseversion }}
+
+      - name: Tag and push release version, updating 'main' with new version
+        run: |
+          git tag ${{ inputs.releaseversion }}
+          git push origin main
+          git push origin ${{ inputs.releaseversion }}
+
       - name: Build pass-auth
         run: |
           yarn install --frozen-lockfile
-          yarn build:latest
+          yarn run build
 
       - name: Login to GHCR
         uses: docker/login-action@v2
@@ -65,8 +51,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Retag and push
+      - name: Push release version image
+        run: docker push $DOCKER_IMAGE_NAME:${{ inputs.releaseversion }}
+
+      - name: Bump project version to next dev version
+        run: yarn version --new-version ${{ inputs.nextversion }}
+
+      - name: Push version bump to GH
+        run: git push origin main
+
+      - name: Retag and push next dev image
         run: |
-          docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:${{ inputs.releaseversion }}
-          docker push $DOCKER_IMAGE_NAME:latest
-          docker push $DOCKER_IMAGE_NAME:${{ inputs.releaseversion }}
+          docker tag $DOCKER_IMAGE_NAME:${{ inputs.releaseversion }} $DOCKER_IMAGE_NAME:${{ inputs.nextversion }}
+          docker push $DOCKER_IMAGE_NAME:${{ inputs.nextversion }}

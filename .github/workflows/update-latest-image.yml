@@ -1,4 +1,4 @@
-name: Pass-auth CI
+name: 'Update pass-auth latest image'
 
 on:
   push:
