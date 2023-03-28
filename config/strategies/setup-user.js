@@ -71,7 +71,17 @@ module.exports = async function (_req, profile, done, config) {
         data: [user],
       },
     } = await axios.get(
-      `${config.app.passCoreUrl}${config.app.passCoreNamespace}user?filter[user]=username==${shibbolethAttrs.eppn}`
+      `${config.app.passCoreUrl}${config.app.passCoreNamespace}user?filter[user]=username==${shibbolethAttrs.eppn}`,
+      {
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+          Accept: 'application/vnd.api+json',
+        },
+        auth: {
+          username: this.process.env('PASS_CORE_BACKEND_USER'),
+          password: this.process.env('PASS_CORE_BACKEND_PASSWORD'),
+        },
+      }
     );
 
     if (!user) {
