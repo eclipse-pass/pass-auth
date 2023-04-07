@@ -45,31 +45,25 @@ export default function (app, apiProxy, config) {
     // https://github.com/http-party/node-http-proxy/issues/180
   });
 
-  app.all('/pass-user-service/*', ensureAuthenticated, function (req, res) {
-    apiProxy.web(req, res, { target: config.app.serviceUrls.userServiceUrl });
+  app.all('/user/whoami', ensureAuthenticated, function (req, res) {
+    apiProxy.web(req, res, { target: config.app.passCoreUrl });
   });
 
-  app.all('/schemaservice/*', ensureAuthenticated, function (req, res) {
-    apiProxy.web(req, res, { target: config.app.serviceUrls.schemaServiceUrl });
+  app.all('/schemaservice*', ensureAuthenticated, function (req, res) {
+    apiProxy.web(req, res, { target: config.app.passCoreUrl });
   });
 
-  app.all('/policyservice/*', ensureAuthenticated, function (req, res) {
-    apiProxy.web(req, res, { target: config.app.serviceUrls.policyServiceUrl });
+  app.all('/policyservice*', ensureAuthenticated, function (req, res) {
+    apiProxy.web(req, res, { target: config.app.passCoreUrl });
   });
 
-  app.all('/doi/journal', ensureAuthenticated, function (req, res) {
-    apiProxy.web(req, res, { target: config.app.serviceUrls.doiServiceUrl });
+  app.all('/doi*', ensureAuthenticated, function (req, res) {
+    apiProxy.web(req, res, { target: config.app.passCoreUrl });
   });
 
-  app.all('/doi/manuscript', ensureAuthenticated, function (req, res) {
+  app.all('/file*', function (req, res) {
     apiProxy.web(req, res, {
-      target: config.app.serviceUrls.downloadServiceUrl,
-    });
-  });
-
-  app.all('/file', function (req, res) {
-    apiProxy.web(req, res, {
-      target: config.app.serviceUrls.doiServiceUrl,
+      target: config.app.passCoreUrl,
     });
   });
 }
