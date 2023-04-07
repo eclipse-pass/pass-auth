@@ -1,6 +1,6 @@
-const axios = require('axios').default;
+import axios from 'axios';
 
-module.exports = async function (_req, profile, done, config) {
+export default async function (_req, profile, done, config) {
   if (!profile) {
     return done(new Error('Empty SAML profile returned!'));
   }
@@ -102,4 +102,4 @@ module.exports = async function (_req, profile, done, config) {
       message: err.message,
     });
   }
-};
+}

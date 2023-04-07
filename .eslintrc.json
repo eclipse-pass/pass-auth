@@ -8,6 +8,7 @@
   "extends": ["eslint:recommended", "prettier"],
   "overrides": [],
   "parserOptions": {
+    "sourceType": "module",
     "ecmaVersion": "latest"
   },
   "rules": {}

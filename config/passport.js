@@ -1,4 +1,6 @@
-module.exports = function (passport, config) {
+import multiStrategy from './strategies/multi-saml-strategy.js';
+
+export default function (passport, config) {
   passport.serializeUser(function (user, cb) {
     process.nextTick(function () {
       return cb(null, user);
@@ -12,7 +14,7 @@ module.exports = function (passport, config) {
   });
 
   const strategies = {
-    multiSaml: require('./strategies/multi-saml-strategy')(config),
+    multiSaml: multiStrategy(config),
   };
 
   const strategy = strategies[config.passport.strategy];
@@ -20,4 +22,4 @@ module.exports = function (passport, config) {
   passport.use(strategy);
 
   return strategy;
-};
+}

@@ -1,4 +1,4 @@
-module.exports = function (app, passport, config, strategy) {
+export default function (app, passport, config, strategy, urlencodedParser) {
   app.get(
     config.app.loginPath,
     passport.authenticate('saml', {
@@ -15,6 +15,7 @@ module.exports = function (app, passport, config, strategy) {
 
   app.post(
     config.passport[config.passport.strategy].sp.acsUrl,
+    urlencodedParser,
     passport.authenticate('saml', {
       successRedirect: config.app.loginRedirectSuccess,
       failureRedirect: config.app.loginRedirectFailure,
@@ -50,4 +51,4 @@ module.exports = function (app, passport, config, strategy) {
       );
     }
   );
-};
+}

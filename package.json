@@ -4,6 +4,7 @@
   "description": "A service provider authentication strategy for the pass-eclipse project.",
   "author": "Jared Galanis",
   "proxy": "https://pass.local",
+  "type": "module",
   "scripts": {
     "build": "docker build -t ghcr.io/eclipse-pass/pass-auth:$npm_package_version .",
     "build:latest": "docker build -t ghcr.io/eclipse-pass/pass-auth:latest .",
@@ -18,12 +19,14 @@
     "axios": "^0.27.2",
     "body-parser": "^1.20.0",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.2",
     "errorhandler": "^1.5.1",
     "express": "^4.18.1",
     "express-enforces-ssl": "^1.1.0",
     "express-handlebars": "^6.0.6",
     "express-session": "^1.17.3",
+    "formidable": "v3",
     "helmet": "^6.0.0",
     "http-proxy": "^1.18.1",
     "morgan": "^1.10.0",
@@ -52,7 +55,7 @@
     ]
   },
   "engines": {
-    "node": ">= 14.0.0"
+    "node": ">= 14"
   },
   "license": "MIT"
 }

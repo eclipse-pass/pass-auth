@@ -1,6 +1,7 @@
-const { MultiSamlStrategy } = require('passport-saml');
+import { MultiSamlStrategy } from 'passport-saml';
+import setupUser from './setup-user.js';
 
-module.exports = function (config) {
+export default function (config) {
   return new MultiSamlStrategy(
     {
       passReqToCallback: true,
@@ -17,7 +18,7 @@ module.exports = function (config) {
       },
     },
     async (req, profile, done) => {
-      return require('./setup-user')(req, profile, done, config);
+      return setupUser(req, profile, done, config);
     }
   );
-};
+}
