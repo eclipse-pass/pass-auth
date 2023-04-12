@@ -30,8 +30,6 @@ export default function () {
       passCoreNamespace: process.env.PASS_CORE_NAMESPACE,
       passUiUrl: process.env.PASS_UI_URL,
       passUiPath: process.env.PASS_UI_ROOT_URL,
-      basicAuthUserName: process.env.PASS_CORE_BACKEND_USER,
-      basicAuthPassword: process.env.PASS_CORE_BACKEND_PASSWORD,
     },
 
     passport: {

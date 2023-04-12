@@ -76,10 +76,15 @@ export default async function (_req, profile, done, config) {
         headers: {
           'Content-Type': 'application/vnd.api+json',
           Accept: 'application/vnd.api+json',
-        },
-        auth: {
-          username: config.app.basicAuthUserName,
-          password: config.app.basicAuthPassword,
+          Displayname: shibbolethAttrs.displayName,
+          Mail: shibbolethAttrs.email,
+          Eppn: shibbolethAttrs.eppn,
+          Givenname: shibbolethAttrs.givenName,
+          Sn: shibbolethAttrs.surname,
+          Affiliation: shibbolethAttrs.scopedAffiliation,
+          Employeenumber: shibbolethAttrs.employeeNumber,
+          'unique-id': shibbolethAttrs.uniqueId,
+          employeeid: shibbolethAttrs.employeeIdType,
         },
       }
     );
