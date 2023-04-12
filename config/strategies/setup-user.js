@@ -66,12 +66,8 @@ export default async function (_req, profile, done, config) {
   const shibbolethAttrs = convertProfileToUser(profile);
 
   try {
-    const {
-      data: {
-        data: [user],
-      },
-    } = await axios.get(
-      `${config.app.passCoreUrl}${config.app.passCoreNamespace}user?filter[user]=username==${shibbolethAttrs.eppn}`,
+    const { data: user } = await axios.get(
+      `${config.app.passCoreUrl}user/whoami`,
       {
         headers: {
           'Content-Type': 'application/vnd.api+json',
@@ -97,7 +93,6 @@ export default async function (_req, profile, done, config) {
 
     return done(null, {
       id: user.id,
-      username: shibbolethAttrs.eppn,
       shibbolethAttrs,
     });
   } catch (err) {
