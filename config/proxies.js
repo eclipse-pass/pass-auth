@@ -1,6 +1,6 @@
-const ensureAuthenticated = require('../middleware/ensure-auth');
+import ensureAuthenticated from '../middleware/ensure-auth.js';
 
-module.exports = function (app, apiProxy, config) {
+export default function (app, apiProxy, config) {
   app.all(
     `/${config.app.passCoreNamespace}*`,
     ensureAuthenticated,
@@ -38,41 +38,28 @@ module.exports = function (app, apiProxy, config) {
     proxyReq.setHeader('unique-id', user.shibbolethAttrs.uniqueId);
     proxyReq.setHeader('employeeid', user.shibbolethAttrs.employeeIdType);
 
-    // this is necessary because the bodyParser middleware and http-proxy
+    // warning: bodyParser middleware and http-proxy
     // do not play well together with POST requests
+    // see this issue if bodyParser usage becomes global and we
+    // need to operate on post bodies
     // https://github.com/http-party/node-http-proxy/issues/180
-    // Updated note: this seems to not be necessary with all posts, but might be
-    // required for things like the file service
-    //   if (req.body) {
-    //     let bodyData = JSON.stringify(req.body);
-    //     // incase if content-type is application/x-www-form-urlencoded -> we need to change to application/json
-    //     proxyReq.setHeader('Content-Type', 'application/json');
-    //     proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
-    //     // stream the content
-    //     proxyReq.write(bodyData);
-    //   }
   });
 
-  app.all('/pass-user-service/*', ensureAuthenticated, function (req, res) {
-    apiProxy.web(req, res, { target: config.app.serviceUrls.userServiceUrl });
+  app.all('/schemaservice*', ensureAuthenticated, function (req, res) {
+    apiProxy.web(req, res, { target: config.app.passCoreUrl });
   });
 
-  app.all('/schemaservice/*', ensureAuthenticated, function (req, res) {
-    apiProxy.web(req, res, { target: config.app.serviceUrls.schemaServiceUrl });
+  app.all('/policyservice*', ensureAuthenticated, function (req, res) {
+    apiProxy.web(req, res, { target: config.app.passCoreUrl });
   });
 
-  app.all('/policyservice/*', ensureAuthenticated, function (req, res) {
-    apiProxy.web(req, res, { target: config.app.serviceUrls.policyServiceUrl });
+  app.all('/doi*', ensureAuthenticated, function (req, res) {
+    apiProxy.web(req, res, { target: config.app.passCoreUrl });
   });
 
-  // This points to the doi service in core
-  app.all('/doi/journal', ensureAuthenticated, function (req, res) {
-    apiProxy.web(req, res, { target: config.app.serviceUrls.doiServiceUrl });
-  });
-
-  app.all('/doi/manuscript', ensureAuthenticated, function (req, res) {
+  app.all('/file*', function (req, res) {
     apiProxy.web(req, res, {
-      target: config.app.serviceUrls.downloadServiceUrl,
+      target: config.app.passCoreUrl,
     });
   });
-};
+}

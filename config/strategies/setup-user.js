@@ -1,6 +1,6 @@
-const axios = require('axios').default;
+import axios from 'axios';
 
-module.exports = async function (_req, profile, done, config) {
+export default async function (_req, profile, done, config) {
   if (!profile) {
     return done(new Error('Empty SAML profile returned!'));
   }
@@ -66,20 +66,21 @@ module.exports = async function (_req, profile, done, config) {
   const shibbolethAttrs = convertProfileToUser(profile);
 
   try {
-    const {
-      data: {
-        data: [user],
-      },
-    } = await axios.get(
-      `${config.app.passCoreUrl}${config.app.passCoreNamespace}user?filter[user]=username==${shibbolethAttrs.eppn}`,
+    const { data: user } = await axios.get(
+      `${config.app.passCoreUrl}user/whoami`,
       {
         headers: {
           'Content-Type': 'application/vnd.api+json',
           Accept: 'application/vnd.api+json',
-        },
-        auth: {
-          username: config.app.basicAuthUserName,
-          password: config.app.basicAuthPassword,
+          Displayname: shibbolethAttrs.displayName,
+          Mail: shibbolethAttrs.email,
+          Eppn: shibbolethAttrs.eppn,
+          Givenname: shibbolethAttrs.givenName,
+          Sn: shibbolethAttrs.surname,
+          Affiliation: shibbolethAttrs.scopedAffiliation,
+          Employeenumber: shibbolethAttrs.employeeNumber,
+          'unique-id': shibbolethAttrs.uniqueId,
+          employeeid: shibbolethAttrs.employeeIdType,
         },
       }
     );
@@ -92,7 +93,6 @@ module.exports = async function (_req, profile, done, config) {
 
     return done(null, {
       id: user.id,
-      username: shibbolethAttrs.eppn,
       shibbolethAttrs,
     });
   } catch (err) {
@@ -102,4 +102,4 @@ module.exports = async function (_req, profile, done, config) {
       message: err.message,
     });
   }
-};
+}

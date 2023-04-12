@@ -1,6 +1,6 @@
-const fs = require('fs');
+import fs from 'fs';
 
-module.exports = function () {
+export default function () {
   // passport-saml requires the certs to be single line strings in some
   // properties rather than the full cert file.
   const makeSingleLine = (fileData) => {
@@ -19,6 +19,8 @@ module.exports = function () {
   return {
     app: {
       port: process.env.AUTH_PORT,
+      allowOrigin: process.env.ALLOW_ORIGIN,
+      allowMethods: process.env.ALLOW_METHODS,
       loginPath: process.env.AUTH_LOGIN,
       loginRedirectSuccess: process.env.AUTH_LOGIN_SUCCESS,
       loginRedirectFailure: process.env.AUTH_LOGIN_FAILURE,
@@ -28,17 +30,6 @@ module.exports = function () {
       passCoreNamespace: process.env.PASS_CORE_NAMESPACE,
       passUiUrl: process.env.PASS_UI_URL,
       passUiPath: process.env.PASS_UI_ROOT_URL,
-      basicAuthUserName: process.env.PASS_CORE_BACKEND_USER,
-      basicAuthPassword: process.env.PASS_CORE_BACKEND_PASSWORD,
-      serviceUrls: {
-        fcrepoUrl: process.env.FCREPO_URL,
-        userServiceUrl: process.env.USER_SERVICE_URL,
-        elasticSearchUrl: process.env.ELASTIC_SEARCH_URL,
-        schemaServiceUrl: process.env.SCHEMA_SERVICE_URL,
-        policyServiceUrl: process.env.POLICY_SERVICE_URL,
-        doiServiceUrl: process.env.DOI_SERVICE_URL,
-        downloadServiceUrl: process.env.DOWNLOAD_SERVICE_URL,
-      },
     },
 
     passport: {
@@ -62,4 +53,4 @@ module.exports = function () {
       },
     },
   };
-};
+}

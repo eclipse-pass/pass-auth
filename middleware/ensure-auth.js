@@ -1,4 +1,4 @@
-module.exports = function ensureAuthenticated(req, res, next) {
+export default function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
@@ -8,4 +8,4 @@ module.exports = function ensureAuthenticated(req, res, next) {
   }
 
   res.redirect(process.env.AUTH_LOGOUT_REDIRECT);
-};
+}
