@@ -41,5 +41,5 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/eclipse-pass/pass-auth:${{ steps.project_version.outputs.version }}
+          docker push ghcr.io/eclipse-pass/pass-auth:${{ steps.project-version.outputs.version }}
           docker push ghcr.io/eclipse-pass/pass-auth:latest
