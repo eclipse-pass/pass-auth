@@ -14,9 +14,6 @@ jobs:
   update-latest-image:
     runs-on: ubuntu-latest
 
-    env:
-      DOCKER_IMAGE_NAME: ghcr.io/eclipse-pass/pass-auth
-
     steps:
       - uses: actions/checkout@v3
 
@@ -44,5 +41,5 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker push $DOCKER_IMAGE_NAME:${{ steps.project_version.outputs.version }}
-          docker push $DOCKER_IMAGE_NAME:latest
+          docker push ghcr.io/eclipse-pass/pass-auth:${{ steps.project_version.outputs.version }}
+          docker push ghcr.io/eclipse-pass/pass-auth:latest
