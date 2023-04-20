@@ -9,6 +9,8 @@ RUN npm install pm2 -g
 
 COPY . .
 
+RUN chmod +x entrypoint.sh
+
 EXPOSE 80 443
 
-CMD ["pm2-runtime", "app.js"]
+ENTRYPOINT ["./entrypoint.sh"]
