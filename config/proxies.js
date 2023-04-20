@@ -45,7 +45,7 @@ export default function (app, apiProxy, config) {
     // https://github.com/http-party/node-http-proxy/issues/180
   });
 
-  app.all('/schemaservice*', ensureAuthenticated, function (req, res) {
+  app.all('/schema', ensureAuthenticated, function (req, res) {
     apiProxy.web(req, res, { target: config.app.passCoreUrl });
   });
 
