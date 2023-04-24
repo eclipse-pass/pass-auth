@@ -49,7 +49,7 @@ export default function (app, apiProxy, config) {
     apiProxy.web(req, res, { target: config.app.passCoreUrl });
   });
 
-  app.all('/policyservice*', ensureAuthenticated, function (req, res) {
+  app.all('/policy*', ensureAuthenticated, function (req, res) {
     apiProxy.web(req, res, { target: config.app.passCoreUrl });
   });
 
