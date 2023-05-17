@@ -1,9 +1,10 @@
 import fs from 'fs';
+import { PassAuthAppConfig } from '../model/model';
 
-export default function () {
+export default function (): PassAuthAppConfig {
   // passport-saml requires the certs to be single line strings in some
   // properties rather than the full cert file.
-  const makeSingleLine = (fileData) => {
+  const makeSingleLine = (fileData: string) => {
     return fileData
       .replace(/[\n\r]/g, '')
       .replace(/-----BEGIN CERTIFICATE-----/g, '')

@@ -1,6 +1,14 @@
 import axios from 'axios';
+import { PassAuthAppConfig } from '../../model/model';
+import { Profile, VerifiedCallback } from 'passport-saml';
+import { Request } from 'express';
 
-export default async function (_req, profile, done, config) {
+export default async function (
+  _req: Request,
+  profile: Profile,
+  done: VerifiedCallback,
+  config: PassAuthAppConfig
+) {
   if (!profile) {
     return done(new Error('Empty SAML profile returned!'));
   }
@@ -45,11 +53,11 @@ export default async function (_req, profile, done, config) {
     'urn:oid:0.9.2342.19200300.100.1.1': 'uniqueIdType',
   };
 
-  const convertProfileToUser = function (profile) {
-    let user = {};
+  const convertProfileToUser = function (profile: Profile) {
+    const user = {};
     let niceName;
     let idx;
-    let keys = Object.keys(profile);
+    const keys = Object.keys(profile);
     let key;
 
     for (idx = 0; idx < keys.length; ++idx) {
