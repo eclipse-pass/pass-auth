@@ -1,14 +1,14 @@
-import { Application, Request, Response } from 'express';
+import { Application, Request, RequestHandler, Response } from 'express';
 import { PassportStatic } from 'passport';
 import { PassAuthAppConfig } from '../model/model';
-import { Strategy } from 'passport-saml';
+import { MultiSamlStrategy } from 'passport-saml';
 
 export default function (
   app: Application,
   passport: PassportStatic,
   config: PassAuthAppConfig,
-  strategy: Strategy,
-  urlencodedParser
+  strategy: MultiSamlStrategy,
+  urlencodedParser: RequestHandler
 ): void {
   app.get(
     config.app.loginPath,
