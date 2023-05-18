@@ -13,6 +13,7 @@ export default function (config: PassAuthAppConfig): MultiSamlStrategy {
 
         const samlConfig = {
           callbackUrl: `https://${request.headers.host}/Shibboleth.sso/SAML2/POST/${idpId}`,
+          // @ts-ignore TODO only available variable is jhu at the moment. We will have to decide wtd.
           ...config.passport.multiSaml[idpId],
           ...config.passport.multiSaml.sp,
         };
@@ -20,7 +21,11 @@ export default function (config: PassAuthAppConfig): MultiSamlStrategy {
         return done(null, samlConfig);
       },
     },
-    async (req: Request, profile: Profile, done: VerifiedCallback) => {
+    async (
+      req: Request,
+      profile: Profile | null | undefined,
+      done: VerifiedCallback
+    ) => {
       return setupUser(req, profile, done, config);
     }
   );

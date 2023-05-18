@@ -37,7 +37,7 @@ export default function (
     'proxyReq',
     function (proxyReq: ClientRequest, req: IncomingMessage) {
       // @ts-ignore not sure if http-proxy has proper TS support, need to investigate more
-      const passAuthUser: PassAuthUser = user;
+      const passAuthUser: PassAuthUser = req.user;
 
       proxyReq.setHeader(
         'Displayname',

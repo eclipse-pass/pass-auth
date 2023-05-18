@@ -63,7 +63,7 @@ const convertProfileToUser = function (profile: Profile): UserShibbolethAttrs {
 
 export default async function (
   _req: Request,
-  profile: Profile,
+  profile: Profile | null | undefined,
   done: VerifiedCallback,
   config: PassAuthAppConfig
 ) {
