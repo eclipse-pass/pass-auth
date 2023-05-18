@@ -10,8 +10,8 @@
     "start": "nodemon src/app.ts",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
-    "lint:check": "eslint .",
-    "lint:fix": "eslint --fix .",
+    "lint:check": "eslint . --ext .ts",
+    "lint:fix": "eslint --fix . --ext .ts",
     "prepare": "husky install"
   },
   "dependencies": {
