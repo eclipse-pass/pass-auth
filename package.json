@@ -13,6 +13,7 @@
     "format:write": "prettier --write .",
     "lint:check": "eslint . --ext .ts",
     "lint:fix": "eslint --fix . --ext .ts",
+    "ts:check": "tsc",
     "prepare": "husky install"
   },
   "dependencies": {
