@@ -1,4 +1,4 @@
-import ensureAuthenticated from '../middleware/ensure-auth.js';
+import ensureAuthenticated from '../middleware/ensure-auth';
 import { Application, Request, Response } from 'express';
 import httpProxy from 'http-proxy';
 import { PassAuthAppConfig, PassAuthUser } from '../@types';
