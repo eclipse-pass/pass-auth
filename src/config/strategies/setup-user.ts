@@ -1,7 +1,65 @@
 import axios from 'axios';
-import { PassAuthAppConfig } from '../../@types';
+import {
+  IIndexable,
+  PassAuthAppConfig,
+  UserShibbolethAttrs,
+} from '../../@types';
 import { Profile, VerifiedCallback } from 'passport-saml';
 import { Request } from 'express';
+
+const getErrorMessage = (error: unknown) => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return String(error);
+};
+
+// Attributes sent from the pass-docker idp (these may OR may not be the same
+// attributes sent by the actual JHU idp):
+///  attributes: {
+//   'urn:oid:0.9.2342.19200300.100.1.1': 'nih-user',
+//   'urn:oid:0.9.2342.19200300.100.1.3': 'nihuser@jhu.edu',
+//   'urn:oid:1.3.6.1.4.1.5923.1.1.1.9': 'FACULTY@johnshopkins.edu',
+//   'urn:oid:1.3.6.1.4.1.5923.1.1.1.1': 'FACULTY',
+//   'urn:oid:2.5.4.4': 'Ser',
+//   'urn:oid:2.16.840.1.113730.3.1.241': 'Nihu Ser',
+//   'urn:oid:2.5.4.42': 'Nihu',
+//   'urn:oid:1.3.6.1.4.1.5923.1.1.1.6': 'nih-user@johnshopkins.edu',
+//   'urn:oid:1.3.6.1.4.1.5923.1.1.1.13': 'KYWJIT@johnshopkins.edu',
+//   'urn:oid:2.16.840.1.113730.3.1.3': '00001421'
+// },
+
+//map of possible profile attributes and display values
+const PROFILE_ATTRS = {
+  'urn:oid:2.16.840.1.113730.3.1.241': 'displayName',
+  'urn:oid:1.3.6.1.4.1.5923.1.1.1.9': 'scopedAffiliation',
+  'urn:oid:0.9.2342.19200300.100.1.3': 'email',
+  'urn:oid:2.16.840.1.113730.3.1.3': 'employeeNumber',
+  'urn:oid:1.3.6.1.4.1.5923.1.1.1.1': 'employeeIdType',
+  'urn:oid:1.3.6.1.4.1.5923.1.1.1.6': 'eppn',
+  'urn:oid:2.5.4.42': 'givenName',
+  'urn:oid:2.5.4.4': 'surname',
+  'urn:oid:1.3.6.1.4.1.5923.1.1.1.13': 'uniqueId',
+  'urn:oid:0.9.2342.19200300.100.1.1': 'uniqueIdType',
+} as IIndexable<string>;
+
+const convertProfileToUser = function (profile: Profile): UserShibbolethAttrs {
+  const userShibbolethAttrs = {} as UserShibbolethAttrs;
+  let niceName;
+  let idx;
+  const keys = Object.keys(profile);
+  let key;
+
+  for (idx = 0; idx < keys.length; ++idx) {
+    key = keys[idx];
+    niceName = PROFILE_ATTRS[key];
+    if (niceName) {
+      userShibbolethAttrs[niceName] = profile[key] as string;
+    }
+  }
+
+  return userShibbolethAttrs;
+};
 
 export default async function (
   _req: Request,
@@ -12,64 +70,6 @@ export default async function (
   if (!profile) {
     return done(new Error('Empty SAML profile returned!'));
   }
-
-  // Attributes sent from the pass-docker idp (these may OR may not be the same
-  // attributes sent by the actual JHU idp):
-  ///  attributes: {
-
-  //   'urn:oid:0.9.2342.19200300.100.1.1': 'nih-user',
-
-  //   'urn:oid:0.9.2342.19200300.100.1.3': 'nihuser@jhu.edu',
-
-  //   'urn:oid:1.3.6.1.4.1.5923.1.1.1.9': 'FACULTY@johnshopkins.edu',
-
-  //   'urn:oid:1.3.6.1.4.1.5923.1.1.1.1': 'FACULTY',
-
-  //   'urn:oid:2.5.4.4': 'Ser',
-
-  //   'urn:oid:2.16.840.1.113730.3.1.241': 'Nihu Ser',
-
-  //   'urn:oid:2.5.4.42': 'Nihu',
-
-  //   'urn:oid:1.3.6.1.4.1.5923.1.1.1.6': 'nih-user@johnshopkins.edu',
-
-  //   'urn:oid:1.3.6.1.4.1.5923.1.1.1.13': 'KYWJIT@johnshopkins.edu',
-
-  //   'urn:oid:2.16.840.1.113730.3.1.3': '00001421'
-
-  // },
-
-  //map of possible profile attributes and display values
-  const profileAttrs = {
-    'urn:oid:2.16.840.1.113730.3.1.241': 'displayName',
-    'urn:oid:1.3.6.1.4.1.5923.1.1.1.9': 'scopedAffiliation',
-    'urn:oid:0.9.2342.19200300.100.1.3': 'email',
-    'urn:oid:2.16.840.1.113730.3.1.3': 'employeeNumber',
-    'urn:oid:1.3.6.1.4.1.5923.1.1.1.1': 'employeeIdType',
-    'urn:oid:1.3.6.1.4.1.5923.1.1.1.6': 'eppn',
-    'urn:oid:2.5.4.42': 'givenName',
-    'urn:oid:2.5.4.4': 'surname',
-    'urn:oid:1.3.6.1.4.1.5923.1.1.1.13': 'uniqueId',
-    'urn:oid:0.9.2342.19200300.100.1.1': 'uniqueIdType',
-  };
-
-  const convertProfileToUser = function (profile: Profile) {
-    const user = {};
-    let niceName;
-    let idx;
-    const keys = Object.keys(profile);
-    let key;
-
-    for (idx = 0; idx < keys.length; ++idx) {
-      key = keys[idx];
-      niceName = profileAttrs[key];
-      if (niceName) {
-        user[niceName] = profile[key];
-      }
-    }
-
-    return user;
-  };
 
   const shibbolethAttrs = convertProfileToUser(profile);
 
@@ -94,7 +94,7 @@ export default async function (
     );
 
     if (!user) {
-      return done(null, false, {
+      return done(null, undefined, {
         message: 'User not found.',
       });
     }
@@ -106,8 +106,8 @@ export default async function (
   } catch (err) {
     console.log(err);
 
-    return done(null, false, {
-      message: err.message,
+    return done(null, undefined, {
+      message: getErrorMessage(err),
     });
   }
 }

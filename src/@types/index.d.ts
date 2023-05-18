@@ -38,3 +38,24 @@ export interface PassAuthAppConfig {
   app: AppConfig;
   passport: PassportConfig;
 }
+
+export interface IIndexable<T = unknown> {
+  [key: string]: T;
+}
+
+export interface UserShibbolethAttrs extends IIndexable<string> {
+  displayName: string;
+  email: string;
+  eppn: string;
+  givenName: string;
+  surname: string;
+  scopedAffiliation: string;
+  employeeNumber: string;
+  uniqueId: string;
+  employeeIdType: string;
+}
+
+export interface PassAuthUser {
+  id: string;
+  shibbolethAttrs: UserShibbolethAttrs;
+}

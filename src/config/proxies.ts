@@ -1,7 +1,7 @@
 import ensureAuthenticated from '../middleware/ensure-auth.js';
 import { Application, Request, Response } from 'express';
 import httpProxy from 'http-proxy';
-import { PassAuthAppConfig } from '../@types';
+import { PassAuthAppConfig, PassAuthUser } from '../@types';
 import { ClientRequest, IncomingMessage } from 'http';
 
 export default function (
@@ -36,18 +36,30 @@ export default function (
   apiProxy.on(
     'proxyReq',
     function (proxyReq: ClientRequest, req: IncomingMessage) {
-      // @ts-ignore TODO check this for user prop
-      const user = req.user;
+      // @ts-ignore not sure if http-proxy has proper TS support, need to investigate more
+      const passAuthUser: PassAuthUser = user;
 
-      proxyReq.setHeader('Displayname', user.shibbolethAttrs.displayName);
-      proxyReq.setHeader('Mail', user.shibbolethAttrs.email);
-      proxyReq.setHeader('Eppn', user.shibbolethAttrs.eppn);
-      proxyReq.setHeader('Givenname', user.shibbolethAttrs.givenName);
-      proxyReq.setHeader('Sn', user.shibbolethAttrs.surname);
-      proxyReq.setHeader('Affiliation', user.shibbolethAttrs.scopedAffiliation);
-      proxyReq.setHeader('Employeenumber', user.shibbolethAttrs.employeeNumber);
-      proxyReq.setHeader('unique-id', user.shibbolethAttrs.uniqueId);
-      proxyReq.setHeader('employeeid', user.shibbolethAttrs.employeeIdType);
+      proxyReq.setHeader(
+        'Displayname',
+        passAuthUser.shibbolethAttrs.displayName
+      );
+      proxyReq.setHeader('Mail', passAuthUser.shibbolethAttrs.email);
+      proxyReq.setHeader('Eppn', passAuthUser.shibbolethAttrs.eppn);
+      proxyReq.setHeader('Givenname', passAuthUser.shibbolethAttrs.givenName);
+      proxyReq.setHeader('Sn', passAuthUser.shibbolethAttrs.surname);
+      proxyReq.setHeader(
+        'Affiliation',
+        passAuthUser.shibbolethAttrs.scopedAffiliation
+      );
+      proxyReq.setHeader(
+        'Employeenumber',
+        passAuthUser.shibbolethAttrs.employeeNumber
+      );
+      proxyReq.setHeader('unique-id', passAuthUser.shibbolethAttrs.uniqueId);
+      proxyReq.setHeader(
+        'employeeid',
+        passAuthUser.shibbolethAttrs.employeeIdType
+      );
 
       // warning: bodyParser middleware and http-proxy
       // do not play well together with POST requests
