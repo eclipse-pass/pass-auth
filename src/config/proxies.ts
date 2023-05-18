@@ -1,7 +1,7 @@
 import ensureAuthenticated from '../middleware/ensure-auth.js';
 import { Application, Request, Response } from 'express';
 import httpProxy from 'http-proxy';
-import { PassAuthAppConfig } from '../model/model';
+import { PassAuthAppConfig } from '../@types';
 import { ClientRequest, IncomingMessage } from 'http';
 
 export default function (

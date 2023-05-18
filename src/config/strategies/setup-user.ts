@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PassAuthAppConfig } from '../../model/model';
+import { PassAuthAppConfig } from '../../@types';
 import { Profile, VerifiedCallback } from 'passport-saml';
 import { Request } from 'express';
 

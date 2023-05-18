@@ -1,6 +1,6 @@
 import { Application, Request, RequestHandler, Response } from 'express';
 import { PassportStatic } from 'passport';
-import { PassAuthAppConfig } from '../model/model';
+import { PassAuthAppConfig } from '../@types';
 import { MultiSamlStrategy } from 'passport-saml';
 
 export default function (

@@ -1,6 +1,6 @@
 import { MultiSamlStrategy, Profile, VerifiedCallback } from 'passport-saml';
 import setupUser from './setup-user';
-import { PassAuthAppConfig } from '../../model/model';
+import { PassAuthAppConfig } from '../../@types';
 import { SamlOptionsCallback } from 'passport-saml/lib/passport-saml/types';
 import { Request } from 'express';
 

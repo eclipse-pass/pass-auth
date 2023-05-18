@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { PassAuthAppConfig } from '../model/model';
+import { PassAuthAppConfig } from '../@types';
 
 export default function (): PassAuthAppConfig {
   // passport-saml requires the certs to be single line strings in some
