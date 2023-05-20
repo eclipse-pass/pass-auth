@@ -5,11 +5,22 @@
     "commonjs": true,
     "es2021": true
   },
-  "extends": ["eslint:recommended", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
   "overrides": [],
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": "latest"
   },
-  "rules": {}
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": "off"
+  }
 }

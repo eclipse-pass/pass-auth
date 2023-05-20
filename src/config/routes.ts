@@ -1,4 +1,15 @@
-export default function (app, passport, config, strategy, urlencodedParser) {
+import { Application, Request, RequestHandler, Response } from 'express';
+import { PassportStatic } from 'passport';
+import { PassAuthAppConfig } from '../@types';
+import { MultiSamlStrategy } from 'passport-saml';
+
+export default function (
+  app: Application,
+  passport: PassportStatic,
+  config: PassAuthAppConfig,
+  strategy: MultiSamlStrategy,
+  urlencodedParser: RequestHandler
+): void {
   app.get(
     config.app.loginPath,
     passport.authenticate('saml', {
@@ -8,13 +19,15 @@ export default function (app, passport, config, strategy, urlencodedParser) {
     })
   );
 
-  app.get(config.app.logoutPath, function (req, res) {
+  app.get(config.app.logoutPath, function (req: Request, res: Response) {
+    // TODO check this for logout
+    // @ts-ignore
     req.logout();
     res.redirect(config.app.logoutRedirect);
   });
 
   app.post(
-    config.passport[config.passport.strategy].sp.acsUrl,
+    config.passport.multiSaml.sp.acsUrl,
     urlencodedParser,
     passport.authenticate('saml', {
       successRedirect: config.app.loginRedirectSuccess,
@@ -22,7 +35,7 @@ export default function (app, passport, config, strategy, urlencodedParser) {
     })
   );
 
-  app.get('/authenticated', (req, res) => {
+  app.get('/authenticated', (req: Request, res: Response) => {
     if (req.isAuthenticated()) {
       res.status(200).send({
         user: req.user,
@@ -33,12 +46,10 @@ export default function (app, passport, config, strategy, urlencodedParser) {
   });
 
   app.get(
-    config.passport[config.passport.strategy].sp.metadataUrl,
-    function (req, res) {
-      const decryptionCert =
-        config.passport[config.passport.strategy].sp.decryptionCert;
-      const signingCert =
-        config.passport[config.passport.strategy].sp.signingCert;
+    config.passport.multiSaml.sp.metadataUrl,
+    function (req: Request, res: Response) {
+      const decryptionCert = config.passport.multiSaml.sp.decryptionCert;
+      const signingCert = config.passport.multiSaml.sp.signingCert;
 
       strategy.generateServiceProviderMetadata(
         req,

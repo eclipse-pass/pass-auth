@@ -10,10 +10,10 @@ import httpProxy from 'http-proxy';
 import { engine } from 'express-handlebars';
 import helmet from 'helmet';
 import expressEnforcesSsl from 'express-enforces-ssl';
-import routes from './config/routes.js';
-import proxies from './config/proxies.js';
-import configurator from './config/config.js';
-import strategy from './config/passport.js';
+import routes from './config/routes';
+import proxies from './config/proxies';
+import configurator from './config/config';
+import strategy from './config/passport';
 import cors from 'cors';
 
 const env = process.env.NODE_ENV || 'development';

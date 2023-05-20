@@ -4,15 +4,16 @@
   "description": "A service provider authentication strategy for the pass-eclipse project.",
   "author": "Jared Galanis",
   "proxy": "https://pass.local",
-  "type": "module",
   "scripts": {
     "build": "docker build -t ghcr.io/eclipse-pass/pass-auth:$npm_package_version .",
     "build:latest": "docker build -t ghcr.io/eclipse-pass/pass-auth:latest .",
-    "start": "nodemon app.js",
+    "start": "tsc & nodemon dist/app.js",
+    "test": "jest",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
-    "lint:check": "eslint .",
-    "lint:fix": "eslint --fix .",
+    "lint:check": "eslint . --ext .ts",
+    "lint:fix": "eslint --fix . --ext .ts",
+    "tsc": "tsc",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -32,16 +33,32 @@
     "morgan": "^1.10.0",
     "nodemon": "^2.0.20",
     "passport": "^0.5.3",
-    "passport-saml": "^3.2.1"
+    "passport-saml": "^3.2.2"
   },
   "devDependencies": {
+    "@jest/globals": "^29.5.0",
+    "@tsconfig/node18": "1.0.3",
+    "@types/cookie-parser": "^1.4.3",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/express-enforces-ssl": "^1.1.1",
+    "@types/express-session": "^1.17.7",
+    "@types/http-proxy": "^1.17.11",
+    "@types/morgan": "^1.9.4",
+    "@types/node": "^20.1.7",
+    "@types/passport": "^1.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.59.6",
+    "@typescript-eslint/parser": "^5.59.6",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.0",
+    "jest": "^29.5.0",
     "lint-staged": "^13.0.3",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "ts-jest": "^29.1.0",
+    "typescript": "4.9.5"
   },
   "husky": {
     "hooks": {
@@ -55,7 +72,7 @@
     ]
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">= 18"
   },
   "license": "MIT"
 }
