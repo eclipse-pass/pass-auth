@@ -16,7 +16,7 @@ interface AppConfig {
 interface PassportConfig {
   strategy: string;
   multiSaml: {
-    jhu: {
+    saml: {
       entryPoint: string;
       cert: string;
     };
