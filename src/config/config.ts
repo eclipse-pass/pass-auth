@@ -36,7 +36,7 @@ export default function (): PassAuthAppConfig {
     passport: {
       strategy: process.env.PASSPORT_STRATEGY,
       multiSaml: {
-        jhu: {
+        saml: {
           entryPoint: process.env.SAML_ENTRY_POINT,
           cert: idpCert,
         },
