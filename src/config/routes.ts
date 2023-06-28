@@ -10,6 +10,14 @@ export default function (
   strategy: MultiSamlStrategy,
   urlencodedParser: RequestHandler
 ): void {
+  app.get('/', (req: Request, res: Response) => {
+    if (req.isAuthenticated()) {
+      res.redirect(config.app.passUiPath);
+    } else {
+      res.redirect(config.app.logoutPath);
+    }
+  });
+
   app.get(
     config.app.loginPath,
     passport.authenticate('saml', {
