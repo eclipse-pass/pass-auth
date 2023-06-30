@@ -71,3 +71,8 @@ jobs:
         run: |
           docker tag $DOCKER_IMAGE_NAME:${{ inputs.releaseversion }} $DOCKER_IMAGE_NAME:${{ inputs.nextversion }}
           docker push $DOCKER_IMAGE_NAME:${{ inputs.nextversion }}
+
+      - name: 'Retag and push :latest image'
+        run: |
+          docker tag $DOCKER_IMAGE_NAME:${{ inputs.releaseversion }} $DOCKER_IMAGE_NAME:latest
+          docker push $DOCKER_IMAGE_NAME:latest
