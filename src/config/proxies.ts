@@ -51,6 +51,10 @@ export default function (
         'Affiliation',
         passAuthUser.shibbolethAttrs.scopedAffiliation
       );
+      proxyReq.setHeader(
+        'Employeenumber',
+        passAuthUser.shibbolethAttrs.employeeNumber
+      );
       proxyReq.setHeader('unique-id', passAuthUser.shibbolethAttrs.uniqueId);
       proxyReq.setHeader(
         'employeeid',
