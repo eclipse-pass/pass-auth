@@ -1,6 +1,6 @@
 {
   "name": "pass-auth",
-  "version": "0.9.0",
+  "version": "1.0.0-SNAPSHOT",
   "description": "A service provider authentication strategy for the pass-eclipse project.",
   "author": "Jared Galanis",
   "proxy": "https://pass.local",
