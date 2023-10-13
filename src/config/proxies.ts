@@ -78,6 +78,14 @@ export default function (
   );
 
   app.all(
+    '/user*',
+    ensureAuthenticated,
+    function (req: Request, res: Response) {
+      apiProxy.web(req, res, { target: config.app.passCoreUrl });
+    }
+  );
+
+  app.all(
     '/policy*',
     ensureAuthenticated,
     function (req: Request, res: Response) {
